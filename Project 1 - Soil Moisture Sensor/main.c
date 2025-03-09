@@ -120,6 +120,7 @@ int main(void)
 	char volMessage[50];
 	char satMessage[50];
 	// This value should be calibrated to the highest voltage; a placeholder is 5V
+  // Could use digital output from STM32 as max voltage limit...
 	float calibration = 5.0;
 	// Convert the raw ADC value to volts
 	float voltage = (adcValue / 4095.0) * calibration;
