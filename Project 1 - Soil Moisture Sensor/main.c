@@ -2,7 +2,10 @@
 /**
   ******************************************************************************
   * @file           : main.c
-  * @brief          : Main program body
+  * @brief          : This is the main program body for the TRC3500 Team C05.
+  *					              All code was part of the pre-built template. Our code
+  *					              includes 2 lines in the "Includes" section and all code
+  *		            			  in the while loop.
   ******************************************************************************
   * @attention
   *
@@ -20,9 +23,6 @@
 #include "main.h"
 #include <string.h>
 #include <stdio.h>
-
-uint32_t Read_ADC(void);
-void Send_Data(uint32_t value);
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -105,12 +105,35 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    uint32_t adc_value = Read_ADC(); // Read the ADC value
-    Send_Data(adc_value);           // Send the data via USART2
-    HAL_Delay(1000);                // 1 second delay
-    /* USER CODE END WHILE */
+	  /* Obtain the ADC data and convert it */
 
-    /* USER CODE BEGIN 3 */
+	  // Initialize the conversion process for ADC
+	  HAL_ADC_Start(&hadc1);
+	  // Allow the conversion to take place for as long as it takes
+	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+	  // Store the 12-bit ADC value (will be between 0 and 4095)
+	  uint32_t adcValue = HAL_ADC_GetValue(&hadc1);
+
+	  /* Print the converted message */
+
+	  // Create a character array to hold the display message
+	  char message[50];
+	  // This value should be calibrated to the highest voltage; a placeholder is 5V
+	  float calibration = 5.0;
+	  // Convert the raw ADC value to volts
+	  float voltage = (adcValue / 4095.0) * calibration;
+	  // Store the message with the live readings where the size of the message is needed for UART
+	  int len = sprintf(message, "Voltage: %.2fV\r\n", voltage);
+	  // Send the message to UART2 for printing via the terminal
+	  HAL_UART_Transmit(&huart2, (uint8_t*)message, len, HAL_MAX_DELAY);
+
+	  /* Introduce a delay */
+
+	  // Delay subsequent messages by 1 second
+	  HAL_Delay(1000);
+   /* USER CODE END WHILE */
+
+   /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
@@ -280,20 +303,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-/* Function to Read ADC1 (PA1) */
-uint32_t Read_ADC(void) {
-    HAL_ADC_Start(&hadc1);
-    HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
-    return HAL_ADC_GetValue(&hadc1); // Returns 0-4095 (12-bit ADC)
-}
 
-/* Function to Send ADC Data via Serial */
-void Send_Data(uint32_t value) {
-    char msg[20];
-    float voltage = (value / 4095.0) * 5.0; // Convert to 0-5V
-    sprintf(msg, "Voltage: %.2fV\r\n", voltage);
-    HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
-}
 /* USER CODE END 4 */
 
 /**
