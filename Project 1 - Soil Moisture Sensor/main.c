@@ -3,9 +3,9 @@
   ******************************************************************************
   * @file           : main.c
   * @brief          : This is the main program body for the TRC3500 Team C05.
-  *					              All code was part of the pre-built template. Our code
-  *					              includes 2 lines in the "Includes" section and all code
-  *		            			  in the while loop.
+  *					  All code was part of the pre-built template. Our code
+  *					  includes 2 lines in the "Includes" section and all code
+  *					  in the while loop.
   ******************************************************************************
   * @attention
   *
@@ -105,35 +105,42 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  /* Obtain the ADC data and convert it */
+	/* Obtain the ADC data and convert it */
 
-	  // Initialize the conversion process for ADC
-	  HAL_ADC_Start(&hadc1);
-	  // Allow the conversion to take place for as long as it takes
-	  HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
-	  // Store the 12-bit ADC value (will be between 0 and 4095)
-	  uint32_t adcValue = HAL_ADC_GetValue(&hadc1);
+	// Initialize the conversion process for ADC
+	HAL_ADC_Start(&hadc1);
+	// Allow the conversion to take place for as long as it takes
+	HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
+	// Store the 12-bit ADC value (will be between 0 and 4095)
+	uint32_t adcValue = HAL_ADC_GetValue(&hadc1);
 
-	  /* Print the converted message */
+	/* Print the converted message */
 
-	  // Create a character array to hold the display message
-	  char message[50];
-	  // This value should be calibrated to the highest voltage; a placeholder is 5V
-	  float calibration = 5.0;
-	  // Convert the raw ADC value to volts
-	  float voltage = (adcValue / 4095.0) * calibration;
-	  // Store the message with the live readings where the size of the message is needed for UART
-	  int len = sprintf(message, "Voltage: %.2fV\r\n", voltage);
-	  // Send the message to UART2 for printing via the terminal
-	  HAL_UART_Transmit(&huart2, (uint8_t*)message, len, HAL_MAX_DELAY);
+	// Create character arrays to hold the display messages
+	char volMessage[50];
+	char satMessage[50];
+	// This value should be calibrated to the highest voltage; a placeholder is 5V
+	float calibration = 5.0;
+	// Convert the raw ADC value to volts
+	float voltage = (adcValue / 4095.0) * calibration;
+	// Convert the voltage to percent saturation
+	int saturation = 100 - ((voltage / calibration) * 100);
+	// Store the message with the live voltage readings and the size of the message for UART
+	int volLen = sprintf(volMessage, "Voltage: %.2fV\r\n", voltage);
+	// Store the message with the saturation levels and the size of the message for UART
+	int satLen = sprintf(satMessage, "Saturation: %d%%\r\n", saturation);
+	// Send the messages to UART2 for printing via the terminal
+	HAL_UART_Transmit(&huart2, (uint8_t*)volMessage, volLen, HAL_MAX_DELAY);
+	HAL_UART_Transmit(&huart2, (uint8_t*)satMessage, satLen, HAL_MAX_DELAY);
 
-	  /* Introduce a delay */
+	/* Introduce a delay */
 
-	  // Delay subsequent messages by 1 second
-	  HAL_Delay(1000);
-   /* USER CODE END WHILE */
+	// Delay subsequent messages by 1 second
+	HAL_Delay(1000);
 
-   /* USER CODE BEGIN 3 */
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
