@@ -3,12 +3,15 @@ Written By: Ishaan Chowdhary
 Last modified: 21/03/2025
 Last Modifier: Ishaan Chowdhary
 
-This program fits a 4th degree polynomial model
+This program fits a 4th degree polynomial model to calculate the moisture from the ADC value passed through serial
 '''
 
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import serial
+
+# Calculating 4th Degree fitted Polynomial
 
 # Load data from CSV
 file_path = "data.csv"  # Change this to the actual file path
@@ -35,3 +38,21 @@ plt.legend()
 plt.title('4th Degree Polynomial Regression')
 plt.grid()
 plt.show()
+
+# Print polynomial equation
+print("Polynomial equation:")
+print(poly_eq)
+
+print("-----------------------------------------------------------------------------------")
+
+# Calculating and outputtign Moisture Percentage
+
+ser = serial.Serial("COM4", 115200, timeout=1)
+
+while True:
+    data = ser.readline().decode("utf-8").strip()
+    if data.isdigit():
+        adc_value = float(data)
+        voltage = adc_value * 3.3
+        moisture = poly_eq(voltage)
+        print(f"Moisture: {moisture:.2f}%")

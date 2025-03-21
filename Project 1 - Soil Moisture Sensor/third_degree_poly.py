@@ -1,3 +1,11 @@
+'''
+Written By: Ishaan Chowdhary
+Last modified: 21/03/2025
+Last Modifier: Ishaan Chowdhary
+
+This program fits a 3rd degree polynomial model
+'''
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
