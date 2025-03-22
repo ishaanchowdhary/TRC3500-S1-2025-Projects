@@ -5,7 +5,7 @@
   * @brief          : This is the main program body for the TRC3500 Team C05.
   *					  All code was part of the pre-built template. Our code
   *					  includes 2 lines in the "Includes" section and all code
-  *					  in the while loop.
+  *					  in the "Infinite loop" section.
   ******************************************************************************
   * @attention
   *
@@ -21,11 +21,11 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include <string.h>
-#include <stdio.h>
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -112,27 +112,17 @@ int main(void)
 	// Allow the conversion to take place for as long as it takes
 	HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY);
 	// Store the 12-bit ADC value (will be between 0 and 4095)
+	// The resolution is 2^12, which is  4096 levels
 	uint32_t adcValue = HAL_ADC_GetValue(&hadc1);
 
 	/* Print the converted message */
 
 	// Create character arrays to hold the display messages
-	char volMessage[50];
-	char satMessage[50];
-	// This value should be calibrated to the highest voltage; a placeholder is 5V
-  // Could use digital output from STM32 as max voltage limit...
-	float calibration = 5.0;
-	// Convert the raw ADC value to volts
-	float voltage = (adcValue / 4095.0) * calibration;
-	// Convert the voltage to percent saturation
-	int saturation = 100 - ((voltage / calibration) * 100);
-	// Store the message with the live voltage readings and the size of the message for UART
-	int volLen = sprintf(volMessage, "Voltage: %.2fV\r\n", voltage);
-	// Store the message with the saturation levels and the size of the message for UART
-	int satLen = sprintf(satMessage, "Saturation: %d%%\r\n", saturation);
-	// Send the messages to UART2 for printing via the terminal
-	HAL_UART_Transmit(&huart2, (uint8_t*)volMessage, volLen, HAL_MAX_DELAY);
-	HAL_UART_Transmit(&huart2, (uint8_t*)satMessage, satLen, HAL_MAX_DELAY);
+	char adcMessage[20];
+	// Store the message with the raw ADC data for UART
+	sprintf(adcMessage, "%lu\r\n", adcValue);
+	// Send the message to UART2 for printing via the serial connection
+	HAL_UART_Transmit(&huart2, (uint8_t*)adcMessage, strlen(adcMessage), HAL_MAX_DELAY);
 
 	/* Introduce a delay */
 
@@ -232,7 +222,7 @@ static void MX_ADC1_Init(void)
 
   /** Configure Regular Channel
   */
-  sConfig.Channel = ADC_CHANNEL_6;
+  sConfig.Channel = ADC_CHANNEL_9;
   sConfig.Rank = ADC_REGULAR_RANK_1;
   sConfig.SamplingTime = ADC_SAMPLETIME_2CYCLES_5;
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
