@@ -77,10 +77,10 @@ while True:
         moisture = expEqu(voltage)
         moisturePercent = (moisture / 20) * 100
         # Print the moisture percentage
-        if (voltage > max(meanVsig)):
+        if (voltage >= max(meanVsig)):
             print(f"Moisture: 0 mL")
             print('Moisture: 0 %\n')
-        elif (voltage < min(meanVsig)):
+        elif (voltage <= min(meanVsig)):
             print(f"Moisture: 20 mL")
             print('Moisture: 100 %\n')
         else:
