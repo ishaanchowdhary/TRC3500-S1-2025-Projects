@@ -1,4 +1,4 @@
-# File Name: pin_drop.py
+# File Name: project_2.py
 # Authors: Ishaan Chowdhary, Emanuel Risso
 # Created: 25/04/2025
 # Last Modified: 25/04/2025
