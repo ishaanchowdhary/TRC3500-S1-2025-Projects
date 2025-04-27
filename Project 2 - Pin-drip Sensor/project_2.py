@@ -25,7 +25,7 @@ debounce_duration = 3000
 # Set the initial last peak detection time to 0 (ms)
 last_peak_time = 0.0
 # Set the voltage threshold (V) to qualify as a HIGH signal from the STM
-threshold_voltage = 3.24
+threshold_voltage = 3
 
 # Initiate an infinite loop
 while True:
