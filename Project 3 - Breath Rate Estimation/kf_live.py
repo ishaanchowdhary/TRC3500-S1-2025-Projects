@@ -2,11 +2,11 @@
 Written by: Ishaan Guha Chowdhary (33115303)
 Last edited: 17/05/2025
 
-Overview:
+Method:
 1. Read data from the sensors over Serial
 2. Preprocess data into breath rate estimates (from thermistor & rubber)
 3. Feed estimates into the Kalman filter in real time
-4. Plot or log the result
+4. Plot or log the result (TBD)
 '''
 
 import serial
