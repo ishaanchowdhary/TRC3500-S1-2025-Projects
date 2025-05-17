@@ -1,6 +1,8 @@
 '''
 Written by: Ishaan Guha Chowdhary (33115303)
 Last edited: 17/05/2025
+
+Code for testing kalman filter on simulated data
 '''
 
 import numpy as np

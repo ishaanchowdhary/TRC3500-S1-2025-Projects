@@ -1,6 +1,8 @@
 '''
 Written by: Ishaan Guha Chowdhary (33115303)
 Last edited: 17/05/2025
+
+Class definition for Breath Rate Kalman Filter
 '''
 
 import numpy as np
