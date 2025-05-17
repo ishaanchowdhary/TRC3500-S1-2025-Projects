@@ -3,9 +3,18 @@ Written by: Ishaan Guha Chowdhary (33115303)
 Last edited: 17/05/2025
 
 Code for testing Hidden Markov Model on simulated data
+
+Generated Output:
+Predicted Hidden States:
+Step 1: Exhale
+Step 2: Rest
+Step 3: Inhale
+Step 4: Exhale
+Step 5: Rest
+Step 6: Inhale
 '''
 
-# pip instal hmmlearn
+# pip install hmmlearn
 
 import numpy as np
 from hmmlearn import hmm
