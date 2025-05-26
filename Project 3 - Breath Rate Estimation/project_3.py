@@ -33,12 +33,14 @@ last_peak_rubber = None
 # Kalman filter
 kf = BreathRateKalmanFilter(dt=DT, sensor_vars=(0.4**2, 0.3**2))
 
+# Smooths Signal
 def smooth_signal(signal):
     return np.convolve(signal, np.ones(5)/5, mode='valid')
 
 # Main loop
 with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
-    print("Listening on", SERIAL_PORT)
+    print("Listening on port", SERIAL_PORT)
+    time.sleep(5)
     try:
         while True:
             # Recieve and decode data
