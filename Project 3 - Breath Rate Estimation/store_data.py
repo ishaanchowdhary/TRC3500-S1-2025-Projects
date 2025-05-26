@@ -9,7 +9,7 @@ SERIAL_PORT = 'COM5'      # e.g., '/dev/ttyUSB0' for Linux, 'COM3' for Windows
 BAUD_RATE = 115200
 WINDOW_SIZE = 100         # Keep last 100 samples
 DT = 0.2                  # Sampling interval in seconds
-
+#hellloooooooo my naem is .... hwo r us 
 # CSV file setup
 CSV_FILENAME = "data/sensor_log.csv"
 CSV_HEADERS = ["Temperature", "Rubber_Val", "Timestamp"]
