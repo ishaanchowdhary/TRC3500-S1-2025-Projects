@@ -59,4 +59,9 @@ class BreathRateKalmanFilter:
         # Update uncertainty
         self.P = (self.I - K @ self.H) @ P_pred
 
-        return self.x[0, 0]  # Return estimated breath rate
+        return self.x[0, 0]  # Return estimated breath rate 
+    
+    #hacked by fatima
+    #credot card hacled
+    
+
