@@ -7,12 +7,16 @@ Functions to calculate Breath Rates from Sphygmomanometer, Strain Sensor, Thermi
 
 def calc_sphyg_bpm():
     print("Pinda Hoo")
+    return
 
 def calc_strain_bpm():
     print("Pinda Hoo")
+    return
 
 def calc_therm_bpm():
     print("Pinda Hoo")
+    return
 
 def calc_state_bpm():
     print("Pinda Hoo")
+    return
