@@ -29,7 +29,7 @@ def parse_line(line):
     """Parses a line like '23.4,102.1,12.5' into floats."""
     try:
         parts = line.strip().split(',')
-        if len(parts) != 3:
+        if len(parts) != 2:
             return None
         sphyg, ts = map(float, parts)
         return sphyg, ts
@@ -66,9 +66,9 @@ def main():
                         sphyg_vals.append(sphyg)
                         timestamps.append(ts)
 
-                        log_to_csv([sphyg, ts])
+                        log_to_csv([sphyg,ts])
                         print(f"sphyg: {sphyg:.2f} | Time: {ts:.2f}")
-                time.sleep(DT)
+                # time.sleep(DT)
 
     except serial.SerialException as e:
         print(f"[ERROR] Serial port error: {e}")

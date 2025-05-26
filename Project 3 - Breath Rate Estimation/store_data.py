@@ -63,7 +63,7 @@ def main():
 
                         log_to_csv([temp, rubber, ts])
                         print(f"[{len(temp_vals):>3}] Temp: {temp:.2f} | Rubber: {rubber:.2f} | Time: {ts:.2f}")
-                time.sleep(DT)
+                # time.sleep(DT)
 
     except serial.SerialException as e:
         print(f"[ERROR] Serial port error: {e}")
