@@ -3,14 +3,16 @@ from scipy.signal import firwin, lfilter
 import matplotlib.pyplot as plt
 
 # Constants
-FS = 120  # Sampling frequency in Hz
+FS = 10  # Sampling frequency in Hz (1 every 100ms)
 CUTOFF = 3  # Low-pass filter cutoff frequency in Hz
 FILTER_ORDER = 30  # FIR filter order
 WINDOW_SIZE = 30  # Bigger window for smoother slope estimate
 HYSTERESIS = 0.0005  # Smaller hysteresis for smoother signals
 BREATH_HISTORY_SIZE = 5  # Number of breaths to average
 
-# 1. Low-pass FIR filter
+FILENAME = 'sensor_log.csv'
+
+# 1. Low-pass FIR filter NOT USED
 def lowpass_filter(signal, fs, cutoff, order):
     fir_coeff = firwin(order + 1, cutoff / (fs / 2))
     return lfilter(fir_coeff, [1.0], signal)
@@ -53,29 +55,32 @@ def calculate_breath_rate(breath_times, history_size):
 
 # 5. Full pipeline
 def process_breath_signal(raw_signal):
-    filtered = lowpass_filter(raw_signal, FS, CUTOFF, FILTER_ORDER)
-    breaths = detect_breaths(filtered, FS, WINDOW_SIZE, HYSTERESIS)
+    #filtered = lowpass_filter(raw_signal, FS, CUTOFF, FILTER_ORDER)
+    breaths = detect_breaths(raw_signal, FS, WINDOW_SIZE, HYSTERESIS)
     rate = calculate_breath_rate(breaths, BREATH_HISTORY_SIZE)
-    return rate, breaths, filtered
+    return rate, breaths
 
 # 6. Simulate test signal
 if __name__ == "__main__":
-    t = np.linspace(0, 60, FS * 60)
-    frequency = 0.25  # 15 BPM
-    amplitude = 1.0
-    clean_breaths = amplitude * np.sin(2 * np.pi * frequency * t)
-    noise = 0.05 * np.random.randn(len(t))
-    signal = clean_breaths + noise
+    t = np.linspace(0, FS*200/100, 200)
+    # frequency = 0.25  # 15 BPM
+    # amplitude = 1.0
+    # clean_breaths = amplitude * np.sin(2 * np.pi * frequency * t)
+    # noise = 0.05 * np.random.randn(len(t))
+    # signal = clean_breaths + noise
+    # import signal
 
+    data = np.loadtxt(FILENAME, delimiter=',')
+    signal = data[200:400,0]
     # Run processing
-    rate, breath_times, filtered = process_breath_signal(signal)
+    rate, breath_times = process_breath_signal(signal)
     print(f"Estimated Breath Rate: {rate:.2f} BPM")
     print(f"Detected breaths: {len(breath_times)}")
-
+    print(breath_times)
     # Plotting
     plt.figure(figsize=(12, 4))
-    plt.plot(t, filtered, label='Filtered Signal')
-    plt.scatter(breath_times, [filtered[int(bt * FS)] for bt in breath_times], color='red', label='Breaths')
+    plt.plot(t, signal, label='Filtered Signal')
+    plt.scatter(breath_times, [signal[int(bt * FS)] for bt in breath_times], color='red', label='Breaths')
     plt.xlabel("Time (s)")
     plt.ylabel("Signal")
     plt.title(f"Estimated Breath Rate: {rate:.2f} BPM")
