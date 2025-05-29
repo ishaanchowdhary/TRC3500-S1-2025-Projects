@@ -90,7 +90,8 @@ if __name__ == "__main__":
     print(breath_times)
     # Plotting
     plt.figure(figsize=(12, 4))
-    plt.plot(t, signal, label='Filtered Signal')
+    plt.plot(t, signal, label='Raw Signal')
+    plt.plot(smooth_signal(t), smooth_signal(signal), label='Filtered Signal')
     plt.scatter(breath_times, [signal[int(bt * FS)] for bt in breath_times], color='red', label='Breaths')
     plt.xlabel("Time (s)")
     plt.ylabel("Signal")
