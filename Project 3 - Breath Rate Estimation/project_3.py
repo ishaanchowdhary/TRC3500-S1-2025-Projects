@@ -11,7 +11,7 @@ import numpy as np
 from collections import deque
 import matplotlib.pyplot as plt
 
-from Preprocessing.calculate_BPM import * # Functions for calculating BPM from Sphyg, Strain and Thermistor Sensor Data
+from Preprocessing.signal_processing import * # Functions for calculating BPM from Sphyg, Strain and Thermistor Sensor Data
 # from Preprocessing.super_imposed_state import * # Functions for calculating super-imposed state
 from SensorFusion.kalman_filter import BreathRateKalmanFilter
 

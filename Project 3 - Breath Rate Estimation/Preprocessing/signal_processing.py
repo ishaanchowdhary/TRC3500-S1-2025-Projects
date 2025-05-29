@@ -67,8 +67,3 @@ def process_breath_signal(raw_signal):
     breaths = detect_breaths(raw_signal, FS, WINDOW_SIZE, HYSTERESIS)
     rate = calculate_breath_rate(breaths, BREATH_HISTORY_SIZE)
     return rate, breaths
-
-
-def calc_state_bpm():
-    print("Pinda Hoo")
-    return
