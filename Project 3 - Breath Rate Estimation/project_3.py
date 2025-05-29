@@ -33,10 +33,6 @@ last_peak_rubber = None
 # Kalman filter
 kf = BreathRateKalmanFilter(dt=DT, sensor_vars=(0.4**2, 0.3**2))
 
-# Smooths Signal
-def smooth_signal(signal):
-    return np.convolve(signal, np.ones(5)/5, mode='valid')
-
 # Main loop
 with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
     print("Listening on port", SERIAL_PORT)
@@ -58,8 +54,8 @@ with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
             time_data.append(t)
 
             # TODO: Calculate Breath Rate
-            br_therm = calc_therm_bpm()
-            br_strain = calc_strain_bpm()
+            br_therm = process_breath_signal(temp_data)
+            br_strain = process_breath_signal(rubber_data)
 
             # Use most recent valid estimate or fallback
             est_temp = br_therm if br_therm else kf.x[0, 0]
