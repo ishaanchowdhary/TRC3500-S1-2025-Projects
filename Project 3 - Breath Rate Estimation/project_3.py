@@ -33,14 +33,13 @@ last_peak_rubber = None
 # Kalman filter
 kf = BreathRateKalmanFilter(dt=DT, sensor_vars=(0.4**2, 0.3**2))
 
+initial_ts = None
+
 # Main loop
 with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
     print("Listening on port", SERIAL_PORT)
     time.sleep(5)
     try:
-        # Get initial time stamp
-        line = ser.readline().decode().strip() # expecting line = 'temp_val,rubber_val,time_stamp' as float
-        _, _,initial_ts = map(float, line.split(','))
         while True:
             start_time = time.time()
             # Recieve and decode data
@@ -51,14 +50,19 @@ with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
                 temp_val, rubber_val,time_stamp = map(float, line.split(','))
             except ValueError:
                 continue  # skip malformed lines
+
+            # Get Initial Timestamp if nonexistent
+            if initial_ts == None:
+                initial_ts = time_stamp
+            
             time_stamp -= initial_ts
             temp_data.append(temp_val)
             rubber_data.append(rubber_val)
             time_data.append(time_stamp)
 
             # TODO: Calculate Breath Rate
-            br_therm = process_breath_signal(temp_data)
-            br_strain = process_breath_signal(rubber_data)
+            br_therm, _ = process_breath_signal(temp_data)
+            br_strain, _ = process_breath_signal(rubber_data)
 
             # Use most recent valid estimate or fallback
             est_temp = br_therm if br_therm else kf.x[0, 0]
