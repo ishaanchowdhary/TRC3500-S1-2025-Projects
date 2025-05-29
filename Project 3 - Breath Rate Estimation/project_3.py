@@ -38,20 +38,23 @@ with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
     print("Listening on port", SERIAL_PORT)
     time.sleep(5)
     try:
+        # Get initial time stamp
+        line = ser.readline().decode().strip() # expecting line = 'temp_val,rubber_val,time_stamp' as float
+        _, _,initial_ts = map(float, line.split(','))
         while True:
+            start_time = time.time()
             # Recieve and decode data
-            line = ser.readline().decode().strip() # expecting line = 'temp_val,rubber_val' as float
+            line = ser.readline().decode().strip() # expecting line = 'temp_val,rubber_val,time_stamp' as float
             if not line:
                 continue # skip invalid input
             try:
-                temp_val, rubber_val = map(float, line.split(','))
+                temp_val, rubber_val,time_stamp = map(float, line.split(','))
             except ValueError:
                 continue  # skip malformed lines
-
-            t = time.time()
+            time_stamp -= initial_ts
             temp_data.append(temp_val)
             rubber_data.append(rubber_val)
-            time_data.append(t)
+            time_data.append(time_stamp)
 
             # TODO: Calculate Breath Rate
             br_therm = process_breath_signal(temp_data)
@@ -63,7 +66,7 @@ with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
 
             # Update Kalman Filter and record latency
             fused_bpm = kf.update(np.array([est_temp, est_rubber])) # Breaths per minute
-            latency = time.time() - t # seconds
+            latency = time.time() - start_time # seconds
 
             # Print outputs
             print(f"Temp BPM: {br_therm}, Rubber BPM: {br_strain}, Fused BPM: {fused_bpm:.2f}")
