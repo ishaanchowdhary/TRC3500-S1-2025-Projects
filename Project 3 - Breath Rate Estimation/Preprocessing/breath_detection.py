@@ -1,3 +1,10 @@
+'''
+Written by: Emille Enriquez
+Last edited: 29/05/2025
+
+Calculates Breath Rate from recorded csv file.
+'''
+
 import numpy as np
 from scipy.signal import firwin, lfilter
 import matplotlib.pyplot as plt
@@ -10,7 +17,7 @@ WINDOW_SIZE = 30  # Bigger window for smoother slope estimate
 HYSTERESIS = 0.0005  # Smaller hysteresis for smoother signals
 BREATH_HISTORY_SIZE = 5  # Number of breaths to average
 
-FILENAME = 'sensor_log.csv'
+FILENAME = 'data/sensor_log.csv'
 
 # 1. Low-pass FIR filter NOT USED
 def lowpass_filter(signal, fs, cutoff, order):
