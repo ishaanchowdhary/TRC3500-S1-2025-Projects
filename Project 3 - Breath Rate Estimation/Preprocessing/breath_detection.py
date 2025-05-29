@@ -8,7 +8,7 @@ Calculates Breath Rate from recorded csv file.
 import numpy as np
 from scipy.signal import firwin, lfilter
 import matplotlib.pyplot as plt
-
+from SensorFusion.kalman_filter import BreathRateKalmanFilter
 # Constants
 FS = 10  # Sampling frequency in Hz (1 every 100ms)
 CUTOFF = 3  # Low-pass filter cutoff frequency in Hz

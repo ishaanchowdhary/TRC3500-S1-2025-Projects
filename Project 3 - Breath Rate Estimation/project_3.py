@@ -33,6 +33,7 @@ last_peak_rubber = None
 # Kalman filter
 kf = BreathRateKalmanFilter(dt=DT, sensor_vars=(0.4**2, 0.3**2))
 
+# To make live time initiate from 0
 initial_ts = None
 
 # Main loop
