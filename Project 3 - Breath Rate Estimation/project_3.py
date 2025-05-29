@@ -31,7 +31,7 @@ last_peak_temp = None
 last_peak_rubber = None
 
 # Kalman filter
-kf = BreathRateKalmanFilter(dt=DT, sensor_vars=(0.4**2, 0.3**2))
+kf = BreathRateKalmanFilter(dt=DT, sensor_vars=(0.4**2, 0.3**2),initial_rate=19.0)
 
 # To make live time initiate from 0
 initial_ts = None
