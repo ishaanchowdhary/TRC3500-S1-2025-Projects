@@ -20,10 +20,9 @@ WINDOW_SIZE = 30  # Bigger window for smoother slope estimate
 HYSTERESIS = 0.0005  # Smaller hysteresis for smoother signals
 BREATH_HISTORY_SIZE = 5  # Number of breaths to average
 
-# 1. Low-pass FIR filter NOT USED
-def lowpass_filter(signal, fs, cutoff, order):
-    fir_coeff = firwin(order + 1, cutoff / (fs / 2))
-    return lfilter(fir_coeff, [1.0], signal)
+# 1. Smooth signal
+def smooth_signal(signal):
+    return np.convolve(signal, np.ones(5)/5, mode='valid')
 
 # 2. Gradient estimation via linear regression
 def compute_gradient(window):
@@ -63,7 +62,7 @@ def calculate_breath_rate(breath_times, history_size):
 
 # 5. Full pipeline
 def process_breath_signal(raw_signal):
-    #filtered = lowpass_filter(raw_signal, FS, CUTOFF, FILTER_ORDER)
-    breaths = detect_breaths(raw_signal, FS, WINDOW_SIZE, HYSTERESIS)
+    filtered = smooth_signal(raw_signal)
+    breaths = detect_breaths(filtered, FS, WINDOW_SIZE, HYSTERESIS)
     rate = calculate_breath_rate(breaths, BREATH_HISTORY_SIZE)
     return rate, breaths
