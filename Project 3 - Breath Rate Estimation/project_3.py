@@ -42,14 +42,17 @@ with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
     time.sleep(5)
     try:
         while True:
+            # print('cheese')
             start_time = time.time()
             # Recieve and decode data
             line = ser.readline().decode().strip() # expecting line = 'temp_val,rubber_val,time_stamp' as float
             if not line:
+                # print("chips")
                 continue # skip invalid input
             try:
                 temp_val, rubber_val, time_stamp = map(float, line.split(','))
             except ValueError:
+                # print("crackers")
                 continue  # skip malformed lines
 
             # Get Initial Timestamp if nonexistent
