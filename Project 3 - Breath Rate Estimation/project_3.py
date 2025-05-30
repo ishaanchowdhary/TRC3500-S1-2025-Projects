@@ -48,7 +48,7 @@ with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
             if not line:
                 continue # skip invalid input
             try:
-                temp_val, rubber_val,time_stamp = map(float, line.split(','))
+                temp_val, rubber_val, time_stamp = map(float, line.split(','))
             except ValueError:
                 continue  # skip malformed lines
 
