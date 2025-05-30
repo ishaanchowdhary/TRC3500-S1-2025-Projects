@@ -61,8 +61,8 @@ def calculate_breath_rate(breath_times, history_size):
     return 60 / weighted_avg  # BPM
 
 # 5. Full pipeline
-def process_breath_signal(raw_signal):
+def process_breath_signal(raw_signal, fs = FS, window_size = WINDOW_SIZE, hysteresis = HYSTERESIS, breath_history_size = BREATH_HISTORY_SIZE):
     filtered = smooth_signal(raw_signal)
-    breaths = detect_breaths(filtered, FS, WINDOW_SIZE, HYSTERESIS)
-    rate = calculate_breath_rate(breaths, BREATH_HISTORY_SIZE)
+    breaths = detect_breaths(filtered, fs, window_size, hysteresis)
+    rate = calculate_breath_rate(breaths, breath_history_size)
     return rate, breaths

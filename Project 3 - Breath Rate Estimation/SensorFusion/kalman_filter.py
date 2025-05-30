@@ -11,7 +11,7 @@ class BreathRateKalmanFilter:
     '''
     Kalman Filter for measuring breath rate from two sources (thermistor and conductive rubber)
     '''
-    def __init__(self, dt, process_var=0.01, sensor_vars=(0.1, 0.1), initial_rate = 12.0):
+    def __init__(self, dt, process_var=0.05, sensor_vars=(0.1, 0.1), initial_rate = 12.0):
         # Time step
         self.dt = dt
 

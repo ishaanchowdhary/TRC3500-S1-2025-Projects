@@ -1,6 +1,6 @@
 '''
 Written by: Ishaan Guha Chowdhary (33115303)
-Last edited: 26/05/2025
+Last edited: 30/05/2025
 
 Run time code for Final Submission
 '''
@@ -31,7 +31,7 @@ last_peak_temp = None
 last_peak_rubber = None
 
 # Kalman filter
-kf = BreathRateKalmanFilter(dt=DT, sensor_vars=(0.4**2, 0.3**2),initial_rate=19.0)
+kf = BreathRateKalmanFilter(dt=DT, process_var=0.9, sensor_vars=(0.5, 0.5), initial_rate=0.0)
 
 # To make live time initiate from 0
 initial_ts = None
@@ -62,8 +62,8 @@ with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
             time_data.append(time_stamp)
 
             # TODO: Calculate Breath Rate
-            br_therm, _ = process_breath_signal(temp_data)
-            br_strain, _ = process_breath_signal(rubber_data)
+            br_therm, _ = process_breath_signal(temp_data, window_size = 30)
+            br_strain, _ = process_breath_signal(rubber_data, window_size = 25)
 
             # Use most recent valid estimate or fallback
             est_temp = br_therm if br_therm else kf.x[0, 0]

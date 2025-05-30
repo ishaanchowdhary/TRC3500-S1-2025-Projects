@@ -83,17 +83,17 @@ if __name__ == "__main__":
     #t = np.arange(len(thermo)) / FS
 
     # Init Kalman filter
-    kf = BreathRateKalmanFilter(dt=0.2, sensor_vars=(0.4**2, 0.3**2), initial_rate=18.0)
+    kf = BreathRateKalmanFilter(dt=0.2, process_var=0.9, sensor_vars=(0.5, 0.5), initial_rate=0.0)
 
     fused_rates = []
     times = []
 
     # Simulate live reading
     print("Simulating live readings...\n")
-    for i in range(0, len(thermo) - 50, 50):  # step by 2 for dt = 0.2s
+    for i in range(0, len(thermo) - 49, 50):  # step by 2 for dt = 0.2s
         br_therm, _ = process_breath_signal(thermo[:i+50])
         br_strain, _ = process_breath_signal(rubber[:i+50])
-        
+        #print(len(thermo[:i+50]))
         z = np.array([br_therm, br_strain])
         fused = kf.update(z)
 
