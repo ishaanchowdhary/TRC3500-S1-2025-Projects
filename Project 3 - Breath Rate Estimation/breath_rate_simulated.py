@@ -17,7 +17,7 @@ WINDOW_SIZE = 30  # Bigger window for smoother slope estimate
 HYSTERESIS = 0.0005  # Smaller hysteresis for smoother signals
 BREATH_HISTORY_SIZE = 5  # Number of breaths to average
 
-FILENAME = 'data/sensor_log.csv'
+FILENAME = 'data/sensor_log_talk.csv'
 
 def smooth_signal(signal):
     return np.convolve(signal, np.ones(5)/5, mode='valid')
@@ -74,8 +74,8 @@ def process_breath_signal(signal):
 
 if __name__ == "__main__":
     data = np.loadtxt(FILENAME, delimiter=',')
-    thermo = data[200:400, 0]
-    rubber = data[200:400, 1]
+    thermo = data[:, 0]
+    rubber = data[:, 1] # 200:400
     time = data[200:400, 2] / 1000
     time_start = time[0]
 
@@ -84,6 +84,11 @@ if __name__ == "__main__":
 
     # Init Kalman filter
     kf = BreathRateKalmanFilter(dt=0.2, process_var=0.9, sensor_vars=(0.5, 0.5), initial_rate=0.0)
+
+    # Weighted Averaging Fusion
+    # Weights for sensor reliability
+    weight_therm = 0.4 # Hard code this
+    weight_strain = 0.6 # Hard code this
 
     fused_rates = []
     times = []
@@ -99,8 +104,8 @@ if __name__ == "__main__":
 
         fused_rates.append(fused)
         times.append(i / FS)
-
-        print(f"Time {i/FS:.1f}s | Sensor1: {br_therm:.3f} | Sensor2: {br_strain:.3f} | Fused: {fused:.2f} BPM")
+        fused_weighted = weight_therm * br_therm + weight_strain * br_strain
+        print(f"Time {i/FS:.1f}s | Sensor1: {br_therm:.3f} | Sensor2: {br_strain:.3f} | Kalman Fused: {fused:.2f} BPM | W_A Fused: {fused_weighted:.2f}")
         
         # Simulate live delay (optional for real-time feel)
         # time.sleep(0.2)  # Uncomment this line if running live

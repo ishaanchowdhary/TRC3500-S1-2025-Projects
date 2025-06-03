@@ -36,6 +36,14 @@ kf = BreathRateKalmanFilter(dt=DT, process_var=0.9, sensor_vars=(0.5, 0.5), init
 # To make live time initiate from 0
 initial_ts = None
 
+# Weights for Weighted Averaging Fusion
+THERMISTOR_WEIGHT = 0.4
+STRAIN_WEIGHT = 0.6
+
+# Weighted Averaging Fusion
+def weighted_average(br_therm, br_strain, weight_therm, weight_strain):
+    return br_therm*weight_therm + br_strain+weight_strain
+
 # Main loop
 with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
     print("Listening on port", SERIAL_PORT)
@@ -76,8 +84,10 @@ with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
             fused_bpm = kf.update(np.array([est_temp, est_rubber])) # Breaths per minute
             latency = time.time() - start_time # seconds
 
+            # Weighted Averaging Fusion for comparison
+            wa_fused = weighted_average(br_therm,br_strain,THERMISTOR_WEIGHT,STRAIN_WEIGHT)
             # Print outputs
-            print(f"Temp BPM: {br_therm}, Rubber BPM: {br_strain}, Fused BPM: {fused_bpm:.2f}")
+            print(f"Temp BPM: {br_therm}, Rubber BPM: {br_strain}, Fused BPM: {fused_bpm:.2f}, W_A Fused BPM: {wa_fused:.2f}")
             print(f"Latency: {latency:.2f} s")
 
             time.sleep(DT) # Remove if not needed

@@ -82,7 +82,7 @@ if __name__ == "__main__":
     # import signal
     
     data = np.loadtxt(FILENAME, delimiter=',')
-    signal = data[200:400,1]
+    signal = data[200:400,0]
     # Run processing
     rate, breath_times = process_breath_signal(signal)
     print(f"Estimated Breath Rate: {rate:.2f} BPM")
