@@ -108,4 +108,4 @@ if __name__ == "__main__":
         print(f"Time {i/FS:.1f}s | Sensor1: {br_therm:.3f} | Sensor2: {br_strain:.3f} | Kalman Fused: {fused:.2f} BPM | W_A Fused: {fused_weighted:.2f}")
         
         # Simulate live delay (optional for real-time feel)
-        # time.sleep(0.2)  # Uncomment this line if running live
+        time.sleep(0.2)  # Uncomment this line if running live
