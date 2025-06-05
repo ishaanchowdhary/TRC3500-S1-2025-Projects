@@ -17,7 +17,7 @@ WINDOW_SIZE = 30  # Bigger window for smoother slope estimate
 HYSTERESIS = 0.0005  # Smaller hysteresis for smoother signals
 BREATH_HISTORY_SIZE = 5  # Number of breaths to average
 
-FILENAME = 'data/sensor_log_talk.csv'
+FILENAME = 'data/sensor_log_run.csv'
 
 def smooth_signal(signal):
     return np.convolve(signal, np.ones(5)/5, mode='valid')
@@ -108,4 +108,4 @@ if __name__ == "__main__":
         print(f"Time {i/FS:.1f}s | Sensor1: {br_therm:.3f} | Sensor2: {br_strain:.3f} | Kalman Fused: {fused:.2f} BPM | W_A Fused: {fused_weighted:.2f}")
         
         # Simulate live delay (optional for real-time feel)
-        time.sleep(0.2)  # Uncomment this line if running live
+        # time.sleep(0.2)  # Uncomment this line if running live
