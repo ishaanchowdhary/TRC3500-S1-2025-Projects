@@ -17,7 +17,7 @@ WINDOW_SIZE = 30  # Bigger window for smoother slope estimate
 HYSTERESIS = 0.0005  # Smaller hysteresis for smoother signals
 BREATH_HISTORY_SIZE = 5  # Number of breaths to average
 
-FILENAME = 'data/sensor_log.csv'
+FILENAME = 'data/sensor_log_GRAPH_ONLY.csv'
 
 def smooth_signal(signal):
     return np.convolve(signal, np.ones(5)/5, mode='valid')
